@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>CareerPath AI - Discover Your Future</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #17233c;
+      --text: #46516a;
+      --muted: #8490a6;
+      --purple: #7357d8;
+      --purple-dark: #5d43bd;
+      --purple-soft: #eeeafd;
+      --lime: #dce9a9;
+      --surface: #ffffff;
+      --canvas: #f7f8fc;
+      --line: #e8eaf1;
+      --shadow: 0 18px 50px rgba(42, 50, 79, .08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 92% 8%, rgba(115,87,216,.07), transparent 22rem),
+        var(--canvas);
+      font-family: "DM Sans", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; }
+    button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible { outline: 3px solid rgba(115,87,216,.25); outline-offset: 3px; }
+    .shell { min-height: 100vh; }
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5.5%;
+      border-bottom: 1px solid rgba(232,234,241,.85);
+      background: rgba(247,248,252,.88);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .brand {
+      border: 0;
+      background: none;
+      color: var(--navy);
+      font-family: "Manrope", sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      cursor: pointer;
+    }
+    .brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-right: 9px;
+      border-radius: 11px;
+      color: white;
+      background: var(--purple);
+      font-size: 18px;
+      vertical-align: middle;
+      box-shadow: 0 7px 16px rgba(115,87,216,.22);
+    }
+    nav { display: flex; align-items: center; gap: 6px; }
+    nav button {
+      border: 0;
+      background: transparent;
+      color: #738096;
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    nav button:hover { color: var(--navy); background: white; }
+    nav button.on { color: var(--purple-dark); background: var(--purple-soft); }
+    main { width: min(1180px, 89%); margin: 0 auto; }
+    .view { display: none; min-height: calc(100vh - 76px); animation: enter .35s ease both; }
+    .view.on { display: block; }
+    @keyframes enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    @keyframes floatCard { 0%,100% { transform: translateY(0) rotateY(-5deg) rotateX(3deg); } 50% { transform: translateY(-8px) rotateY(-3deg) rotateX(2deg); } }
+    @media (prefers-reduced-motion: no-preference) {
+      .preview-card { animation: floatCard 5s ease-in-out infinite; }
+    }
+
+    .hero {
+      min-height: 530px;
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      align-items: center;
+      gap: 64px;
+      padding: 54px 0 58px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--purple-dark);
+      background: var(--purple-soft);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 21px;
+    }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #8e78df; }
+    h1, h2, h3 { color: var(--navy); }
+    h1 {
+      max-width: 650px;
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(46px, 5.4vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -4px;
+    }
+    h1 span { display: block; color: var(--purple); }
+    .lead { max-width: 530px; margin: 22px 0 28px; color: #69758b; font-size: 18px; line-height: 1.72; }
+    .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .cta, .ghost {
+      min-height: 48px;
+      border-radius: 12px;
+      padding: 0 20px;
+      border: 0;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .cta { color: white; background: var(--purple); box-shadow: 0 10px 24px rgba(115,87,216,.18); }
+    .cta:hover { background: var(--purple-dark); transform: translateY(-2px); box-shadow: 0 14px 28px rgba(115,87,216,.24); }
+    .ghost { color: var(--navy); background: white; border: 1px solid var(--line); }
+    .ghost:hover { border-color: #cbc4ec; background: #fbfaff; }
+    .cta[disabled], .ghost:disabled { opacity: .42; cursor: not-allowed; transform: none; }
+
+    .preview-wrap { position: relative; }
+    .preview-wrap { perspective: 1200px; }
+    .preview-glow {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -30px;
+      top: -45px;
+      border-radius: 50%;
+      background: var(--lime);
+      opacity: .45;
+      filter: blur(2px);
+    }
+    .preview-card {
+      position: relative;
+      width: 90%;
+      margin-left: auto;
+      padding: 25px;
+      border: 1px solid rgba(232,234,241,.9);
+      border-radius: 22px;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+      transform-style: preserve-3d;
+      transition: transform .18s ease, box-shadow .18s ease;
+      transform: rotateY(-5deg) rotateX(3deg);
+    }
+    .preview-card::before,
+    .preview-card::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      border: 1px solid rgba(215,209,238,.9);
+      border-radius: 22px;
+      background: rgba(255,255,255,.55);
+      pointer-events: none;
+    }
+    .preview-card::before { inset: 14px -16px -16px 18px; transform: translateZ(-24px); }
+    .preview-card::after { inset: 28px -30px -30px 32px; transform: translateZ(-48px); background: rgba(238,234,253,.55); }
+    .preview-card::selection { background: transparent; }
+    .preview-card .preview-head,
+    .preview-card .match-preview {
+      transform: translateZ(18px);
+      transform-style: preserve-3d;
+    }
+    .preview-card.is-tilting {
+      box-shadow: 18px 24px 55px rgba(42,50,79,.14);
+    }
+    .preview-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .preview-head strong { color: var(--navy); font-size: 15px; }
+    .preview-head span { color: #9da6b7; font-size: 12px; }
+    .match-preview { display: grid; grid-template-columns: 44px 1fr 54px; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid #f0f1f5; }
+    .match-preview:first-of-type { border-top: 0; }
+    .preview-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; background: var(--purple-soft); font-size: 21px; }
+    .preview-name { color: var(--navy); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .bar { height: 7px; border-radius: 99px; background: #eff0f5; overflow: hidden; }
+    .bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #8268df, #b1a1ea); width: 0; transition: width 1s ease .15s; }
+    .preview-score { justify-self: end; color: var(--navy); font-family: "Manrope"; font-weight: 800; font-size: 16px; }
+
+    .section { padding: 38px 0 72px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; margin-bottom: 22px; }
+    h2 { font-family: "Manrope"; font-size: 32px; line-height: 1.2; letter-spacing: -1.4px; }
+    .sub { color: var(--muted); margin-top: 7px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      padding: 23px;
+      transition: .22s ease;
+    }
+    .card:hover { transform: translateY(-5px); border-color: #ddd7f3; box-shadow: var(--shadow); }
+    .hero .card,
+    .field-card,
+    .match,
+    .q-shell,
+    .roadmap-summary {
+      transform-style: preserve-3d;
+    }
+    .q-shell {
+      box-shadow: 0 18px 55px rgba(42,50,79,.09), 0 3px 0 rgba(115,87,216,.025);
+    }
+    .field-card {
+      box-shadow: 0 7px 18px rgba(42,50,79,.025);
+      transform: translateZ(0);
+    }
+    .field-card:hover {
+      transform: translateY(-7px) rotateX(2deg);
+      box-shadow: 0 18px 38px rgba(42,50,79,.11);
+    }
+    .step-num { display: grid; place-items: center; width: 42px; height: 42px; margin-bottom: 18px; border-radius: 12px; color: var(--purple); background: var(--purple-soft); font-family: "Manrope"; font-weight: 800; }
+    .card h3 { margin-bottom: 7px; font-size: 17px; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .field-section { padding: 28px 0 68px; }
+    .field-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .field-card {
+      min-height: 150px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: white;
+      padding: 17px;
+      color: var(--text);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .field-card:hover { transform: translateY(-4px); border-color: #dcd5f4; box-shadow: 0 12px 30px rgba(42,50,79,.07); }
+    .field-card .ico { display: block; margin-bottom: 22px; font-size: 25px; }
+    .field-card h3 { font-size: 15px; margin-bottom: 4px; }
+    .field-card p { color: var(--muted); font-size: 12px; }
+
+    #assess { padding: 55px 0 80px; }
+    .q { width: min(680px, 100%); margin: 0 auto; }
+    .q-shell { margin-top: 16px; border: 1px solid var(--line); border-radius: 22px; background: white; padding: 30px; box-shadow: 0 14px 45px rgba(42,50,79,.06); }
+    .prog { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; font-weight: 700; margin-bottom: 9px; }
+    .q h2 { margin: 25px 0 20px; font-size: 27px; }
+    .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    .opt {
+      min-height: 82px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfbfd;
+      color: var(--navy);
+      padding: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .18s ease;
+      box-shadow: 0 3px 0 rgba(42,50,79,.025);
+    }
+    .opt:hover { border-color: #cfc7ec; background: #faf9ff; transform: translateY(-3px); box-shadow: 0 8px 18px rgba(115,87,216,.08); }
+    .opt.sel { border: 2px solid #9380dc; background: var(--purple-soft); padding: 15px; box-shadow: inset 0 1px 0 white, 0 8px 18px rgba(115,87,216,.10); transform: translateY(-2px); }
+    .nav2 { display: flex; justify-content: space-between; margin-top: 23px; }
+
+    #matches, #roadmap { padding: 54px 0 80px; }
+    .matches-grid { grid-template-columns: repeat(3, 1fr); }
+    .match { position: relative; display: flex; flex-direction: column; min-height: 350px; }
+    .match { perspective: 900px; transform-style: preserve-3d; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .match.top { border: 2px solid #b7aaf0; background: linear-gradient(145deg, white 60%, #faf8ff); box-shadow: 0 22px 45px rgba(115,87,216,.10), inset 0 1px 0 white; }
+    .match > * { transform: translateZ(12px); }
+    .match::after { content: ""; position: absolute; inset: 10px -9px -10px 10px; z-index: -1; border-radius: 18px; background: rgba(232,228,248,.38); transform: translateZ(-16px); }
+    .match-topline { display: flex; align-items: center; justify-content: space-between; }
+    .match .ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--purple-soft); font-size: 24px; }
+    .pct { color: var(--purple); font-family: "Manrope"; font-size: 29px; font-weight: 800; }
+    .match h3 { margin: 17px 0 6px; font-size: 20px; }
+    .match p { min-height: 46px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+    .tag { border-radius: 999px; background: #f1f2f7; color: #657087; padding: 5px 9px; font-size: 11px; font-weight: 700; }
+    .why { border-left: 3px solid #b7aaf0; color: var(--muted); font-size: 12px; line-height: 1.5; padding-left: 10px; margin: 3px 0 16px; }
+    .match .cta { width: 100%; margin-top: auto; }
+    .empty { max-width: 580px; margin: 70px auto; text-align: center; }
+    .empty p { color: var(--muted); margin: 10px 0 22px; }
+
+    .roadmap-layout { display: grid; grid-template-columns: 220px 1fr; gap: 28px; margin-top: 24px; }
+    .roadmap-summary { height: fit-content; position: sticky; top: 100px; }
+    .roadmap-summary .ico { display: block; font-size: 38px; margin-bottom: 15px; }
+    .roadmap-summary h3 { margin-bottom: 6px; }
+    .roadmap-summary p { font-size: 13px; }
+    .tl { position: relative; display: grid; gap: 14px; }
+    .tl::before { content: ""; position: absolute; left: 20px; top: 25px; bottom: 25px; width: 2px; background: #ddd9f2; }
+    .step { position: relative; display: grid; grid-template-columns: 42px 1fr; gap: 12px; border: 0; padding: 10px 0; background: transparent; }
+    .step-dot { position: relative; z-index: 2; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 7px solid var(--canvas); background: var(--purple); color: white; font-size: 12px; font-weight: 800; }
+    .step .card { padding: 20px; }
+    .step small { color: var(--purple); font-weight: 800; text-transform: uppercase; letter-spacing: .7px; }
+    .step h3 { margin: 3px 0 10px; }
+    .step ul { list-style: none; display: grid; gap: 7px; }
+    .step li { color: var(--muted); font-size: 14px; }
+    .step li::before { content: "✓"; color: #7d69cb; margin-right: 8px; }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr 380px; gap: 28px; }
+      h1 { letter-spacing: -3px; }
+      .field-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 760px) {
+      header { height: 68px; padding: 0 4%; }
+      .brand { font-size: 16px; }
+      .brand-mark { width: 30px; height: 30px; }
+      nav { position: fixed; left: 12px; right: 12px; bottom: 10px; z-index: 30; justify-content: space-around; height: 62px; border: 1px solid rgba(232,234,241,.9); border-radius: 18px; background: rgba(255,255,255,.94); box-shadow: 0 12px 35px rgba(42,50,79,.16); backdrop-filter: blur(14px); }
+      nav button { flex: 1; height: 46px; padding: 8px 5px; font-size: 12px; }
+      main { width: 92%; }
+      .view { min-height: calc(100vh - 68px); }
+      .hero { grid-template-columns: 1fr; padding: 42px 0 50px; }
+      h1 { font-size: clamp(42px, 13vw, 58px); letter-spacing: -2.8px; }
+      .lead { font-size: 16px; }
+      .preview-wrap { display: none; }
+      .grid, .matches-grid { grid-template-columns: 1fr; }
+      .field-grid { grid-template-columns: 1fr 1fr; }
+      .section-heading { align-items: start; }
+      h2 { font-size: 27px; }
+      .q-shell { padding: 22px 17px; }
+      .opts { grid-template-columns: 1fr; }
+      .q h2 { font-size: 23px; }
+      .match { min-height: 330px; }
+      .roadmap-layout { grid-template-columns: 1fr; }
+      .roadmap-summary { position: static; }
+      #matches, #roadmap, #assess { padding-bottom: 100px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <button class="brand" onclick="go('home')" aria-label="CareerPath AI home"><span class="brand-mark">C</span>CareerPath AI</button>
+      <nav aria-label="Main navigation">
+        <button data-v="home" class="on">Discover</button>
+        <button data-v="assess">Assessment</button>
+        <button data-v="matches">Matches</button>
+        <button data-v="roadmap">Roadmap</button>
+      </nav>
+    </header>
+    <main>
+      <section class="view on" id="home">
+        <div class="hero">
+          <div>
+            <div class="eyebrow">Career discovery, made personal</div>
+            <h1>Find work that <span>fits you.</span></h1>
+            <p class="lead">A five-minute assessment turns what you enjoy into clear career matches and a practical learning roadmap.</p>
+            <div class="row">
+              <button class="cta" onclick="startAssess()">Start your assessment</button>
+              <button class="ghost" onclick="go('matches',1)">View sample matches</button>
+            </div>
+          </div>
+          <div class="preview-wrap">
+            <div class="preview-glow"></div>
+            <div class="preview-card" aria-label="Sample career matches">
+              <div class="preview-head"><strong>Your strongest matches</strong><span>Sample</span></div>
+              <div class="match-preview"><div class="preview-icon">🤖</div><div><div class="preview-name">Data & AI</div><div class="bar"><i data-w="92"></i></div></div><div class="preview-score">92%</div></div>
+              <div class="match-preview"><div class="preview-icon">🎨</div><div><div class="preview-name">UX Design</div><div class="bar"><i data-w="84"></i></div></div><div class="preview-score">84%</div></div>
+              <div class="match-preview"><div class="preview-icon">💻</div><div><div class="preview-name">Software Engineering</div><div class="bar"><i data-w="77"></i></div></div><div class="preview-score">77%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <section class="section">
+          <div class="section-heading"><div><h2>One simple path forward</h2><p class="sub">From curiosity to an actionable plan.</p></div></div>
+          <div class="grid">
+            <article class="card"><div class="step-num">01</div><h3>Share what excites you</h3><p>Answer five short questions about your interests, strengths, and preferred way of working.</p></article>
+            <article class="card"><div class="step-num">02</div><h3>Discover your matches</h3><p>See which careers fit you best, with transparent scores and reasons for every recommendation.</p></article>
+            <article class="card"><div class="step-num">03</div><h3>Start learning</h3><p>Follow a focused roadmap with skills, projects, and milestones you can complete at your pace.</p></article>
+          </div>
+        </section>
+
+        <section class="field-section">
+          <div class="section-heading"><div><h2>Explore a career field</h2><p class="sub">Choose one to shape your assessment.</p></div></div>
+          <div class="field-grid" id="fields"></div>
+        </section>
+      </section>
+
+      <section class="view" id="assess"><div class="q" id="qbox"></div></section>
+      <section class="view" id="matches"></section>
+      <section class="view" id="roadmap"></section>
+    </main>
+  </div>
+
+  <script>
+    const C = {
+      data:{n:"Data & AI",i:"🤖",d:"Turn data into predictions and decisions.",tags:["Python","Statistics","Machine learning"],f:["Python basics","Statistics and probability"],c:["Data analysis with pandas","Intro to machine learning"],p:"Predict student grades from a public dataset"},
+      soft:{n:"Software Engineering",i:"💻",d:"Build apps and systems people use every day.",tags:["JavaScript","Git","APIs"],f:["HTML, CSS and JavaScript","Git and GitHub"],c:["Backend with Node.js","Databases and SQL"],p:"Build a full-stack to-do app with a login-free demo"},
+      ux:{n:"UX Design",i:"🎨",d:"Design products that feel clear and effortless.",tags:["Figma","Research","Prototyping"],f:["Design principles and layout","Figma essentials"],c:["User research methods","Interactive prototyping"],p:"Redesign a campus app and test it with 5 students"},
+      biz:{n:"Business Analytics",i:"📊",d:"Find insights that guide business strategy.",tags:["Excel","SQL","Dashboards"],f:["Advanced Excel","Business metrics 101"],c:["SQL for analysts","Dashboards in Power BI"],p:"Build a sales dashboard with a written recommendation"},
+      sec:{n:"Cybersecurity",i:"🛡️",d:"Protect systems and data from threats.",tags:["Networking","Linux","Ethical hacking"],f:["Networking fundamentals","Linux command line"],c:["Security essentials","Web app security basics"],p:"Secure a practice web app and document each fix"}
+    };
+    const Q = [
+      {q:"Which kind of task sounds most fun?",o:[["Finding patterns in numbers",{data:3,biz:2}],["Building something that works",{soft:3,sec:1}],["Making things look and feel great",{ux:3}],["Solving puzzles and breaking things",{sec:3,soft:1}]]},
+      {q:"How do you like to work?",o:[["Alone, deep in focus",{data:2,soft:2,sec:1}],["With a small creative team",{ux:3,soft:1}],["Talking to people and presenting ideas",{biz:3,ux:1}],["Investigating until I find the cause",{sec:3,data:1}]]},
+      {q:"Which school subject did you enjoy most?",o:[["Maths or statistics",{data:3,biz:1}],["Computer science",{soft:3,sec:1,data:1}],["Art or design",{ux:3}],["Economics or business",{biz:3}]]},
+      {q:"What result would make you proud?",o:[["A model that predicts something useful",{data:3}],["An app thousands of people use",{soft:3,ux:1}],["A product people say is easy to use",{ux:3}],["A system no attacker could break into",{sec:3}]]},
+      {q:"How do you prefer to learn?",o:[["Short projects with real data",{data:2,biz:2}],["Building and fixing code",{soft:3,sec:1}],["Sketching, testing and iterating",{ux:3}],["Case studies and real scenarios",{biz:2,sec:2}]]}
+    ];
+    const $ = s => document.querySelector(s);
+    let step=0, ans=[], res=null, pick=null, hint=null;
+
+    function go(v,sample){
+      if(v==="matches"&&sample&&!res) res=[["data",92],["ux",84],["soft",77]];
+      document.querySelectorAll(".view").forEach(e=>e.classList.toggle("on",e.id===v));
+      document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+      if(v==="assess") drawQ();
+      if(v==="matches") drawMatches();
+      if(v==="roadmap") drawRoad();
+      if(v==="home") setTimeout(()=>document.querySelectorAll(".bar i").forEach(i=>i.style.width=i.dataset.w+"%"),50);
+      history.replaceState(null,"","#"+v);
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+    function startAssess(k){ step=0; ans=[]; res=null; pick=null; hint=k||null; go("assess"); }
+    function drawQ(){
+      const b=$("#qbox");
+      if(step>=Q.length) return finish();
+      const q=Q[step], cur=ans[step];
+      b.innerHTML=`<div class="prog"><span>Question ${step+1} of ${Q.length}</span><span>${Math.round(step/Q.length*100)}% complete</span></div>
+        <div class="bar"><i style="width:${Math.round(step/Q.length*100)}%"></i></div>
+        <div class="q-shell"><h2>${q.q}</h2>
+          <div class="opts">${q.o.map((o,i)=>`<button class="opt ${cur===i?"sel":""}" onclick="sel(${i})" aria-pressed="${cur===i}"><span>${o[0]}</span></button>`).join("")}</div>
+          <div class="nav2"><button class="ghost" onclick="back()" ${step?"":"disabled"}>Back</button>
+          <button class="cta" id="nx" onclick="next()" ${cur===undefined?"disabled":""}>${step===Q.length-1?"See my matches":"Continue"}</button></div>
+        </div>`;
+    }
+    function sel(i){ ans[step]=i; drawQ(); }
+    function next(){ step++; drawQ(); }
+    function back(){ if(step>0){step--;drawQ();} }
+    function finish(){
+      const s={data:0,soft:0,ux:0,biz:0,sec:0};
+      ans.forEach((a,qi)=>{const w=Q[qi].o[a][1];for(const k in w)s[k]+=w[k];});
+      if(hint) s[hint]+=2;
+      const max=Math.max(...Object.values(s));
+      res=Object.entries(s).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>[k,Math.max(55,Math.round(v/max*95))]);
+      pick=res[0][0]; go("matches");
+    }
+    function why(k){
+      const r=[];
+      ans.forEach((a,qi)=>{if(Q[qi].o[a][1][k])r.push(Q[qi].o[a][0].toLowerCase());});
+      return r.length?`Your answer — “${r[0]}” — strongly aligns with this field.`:"A strong option based on your overall answers.";
+    }
+    function drawMatches(){
+      const b=$("#matches");
+      if(!res){b.innerHTML=`<div class="card empty"><h2>No matches yet</h2><p>Take the five-question assessment to see careers that fit you.</p><button class="cta" onclick="startAssess()">Start assessment</button></div>`;return;}
+      const sample=!ans.length;
+      b.innerHTML=`<div class="section-heading"><div><h2>${sample?"Sample career matches":"Your top career matches"}</h2><p class="sub">${sample?"Explore these examples, or take the assessment for your own results.":"Based on your answers, ranked by fit."}</p></div></div>
+        <div class="grid matches-grid">${res.map(([k,p],i)=>{const c=C[k];return`<article class="card match ${i?"":"top"}">
+          <div class="match-topline"><div class="ico">${c.i}</div><div class="pct">${p}%</div></div><h3>${c.n}</h3><p>${c.d}</p>
+          <div class="tags">${c.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+          ${sample?"":`<div class="why">${why(k)}</div>`}<button class="cta" onclick="pick='${k}';go('roadmap')">View roadmap</button></article>`}).join("")}</div>
+        <div class="row" style="margin-top:24px"><button class="ghost" onclick="startAssess()">Retake assessment</button></div>`;
+    }
+    function drawRoad(){
+      const b=$("#roadmap");
+      if(!pick){b.innerHTML=`<div class="card empty"><h2>Choose a career first</h2><p>Your personalized roadmap begins with a career match.</p><button class="cta" onclick="go('matches',1)">Explore matches</button></div>`;return;}
+      const c=C[pick];
+      const ph=[["01","Weeks 1–4","Build your foundations",c.f],["02","Weeks 5–10","Develop core skills",c.c],["03","Weeks 11–14","Create a portfolio project",[c.p,"Document your process and decisions"]],["04","Week 15 onward","Share your work",["Publish your project on GitHub or a portfolio","Ask a mentor or peer for focused feedback"]]];
+      b.innerHTML=`<div class="section-heading"><div><h2>Your learning roadmap</h2><p class="sub">A practical 15-week plan at 6–8 hours per week.</p></div></div>
+        <div class="roadmap-layout"><aside class="card roadmap-summary"><span class="ico">${c.i}</span><h3>${c.n}</h3><p>${c.d}</p></aside>
+        <div class="tl">${ph.map(p=>`<article class="step"><div class="step-dot">${p[0]}</div><div class="card"><small>${p[1]}</small><h3>${p[2]}</h3><ul>${p[3].map(x=>`<li>${x}</li>`).join("")}</ul></div></article>`).join("")}</div></div>
+        <div class="row" style="margin-top:24px"><button class="ghost" onclick="go('matches')">Back to matches</button></div>`;
+    }
+    $("#fields").innerHTML=Object.entries(C).map(([k,c])=>`<button class="field-card" onclick="startAssess('${k}')"><span class="ico">${c.i}</span><h3>${c.n}</h3><p>${c.tags.slice(0,2).join(" · ")}</p></button>`).join("");
+    document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+    const h=location.hash.slice(1);
+    go(["assess","matches","roadmap"].includes(h)?h:"home");
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.addEventListener("pointermove", e=>{
+        const card=e.target.closest(".preview-card,.match");
+        if(!card || card.matches(".match") && card.closest(".matches-grid")===null) return;
+        const rect=card.getBoundingClientRect();
+        const x=(e.clientX-rect.left)/rect.width-.5;
+        const y=(e.clientY-rect.top)/rect.height-.5;
+        const max=card.classList.contains("preview-card")?5:7;
+        card.classList.add("is-tilting");
+        card.style.transform=`rotateY(${x*max}deg) rotateX(${y*-max}deg) translateY(-3px)`;
+      });
+      document.addEventListener("pointerout", e=>{
+        const card=e.target.closest(".preview-card,.match");
+        if(card && !card.contains(e.relatedTarget)){
+          card.classList.remove("is-tilting");
+          card.style.transform="";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
