@@ -311,6 +311,68 @@
     .step li { color: var(--muted); font-size: 14px; }
     .step li::before { content: "✓"; color: #7d69cb; margin-right: 8px; }
 
+    .career-chat-launcher {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--purple);
+      box-shadow: 0 12px 30px rgba(80, 59, 160, .28);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .career-chat-launcher:hover { transform: translateY(-3px); background: var(--purple-dark); box-shadow: 0 16px 34px rgba(80, 59, 160, .34); }
+    .career-chat-launcher-icon { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; color: var(--purple); background: white; font-size: 18px; }
+    .career-chat {
+      position: fixed;
+      right: 24px;
+      bottom: 90px;
+      z-index: 41;
+      display: flex;
+      flex-direction: column;
+      width: min(390px, calc(100vw - 28px));
+      max-height: min(590px, calc(100dvh - 116px));
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 24px 70px rgba(30, 39, 68, .2);
+      transform-origin: bottom right;
+      animation: chatEnter .2s ease both;
+    }
+    .career-chat[hidden] { display: none; }
+    @keyframes chatEnter { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+    .career-chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 17px; color: white; background: var(--navy); }
+    .career-chat-title { display: flex; align-items: center; gap: 11px; }
+    .career-chat-avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: var(--purple-dark); background: white; font-size: 20px; }
+    .career-chat-title strong { display: block; font-size: 14px; }
+    .career-chat-title small { color: #c3cbe0; font-size: 11px; }
+    .career-chat-close { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 10px; color: white; background: rgba(255,255,255,.12); font-size: 21px; cursor: pointer; }
+    .career-chat-close:hover { background: rgba(255,255,255,.22); }
+    .career-chat-note { padding: 9px 16px; border-bottom: 1px solid var(--line); color: #68748a; background: #fafaff; font-size: 11px; line-height: 1.5; }
+    .career-chat-messages { display: flex; flex: 1; flex-direction: column; gap: 12px; min-height: 150px; overflow-y: auto; padding: 16px; overscroll-behavior: contain; }
+    .career-chat-message { max-width: 90%; border-radius: 14px; padding: 11px 13px; font-size: 13px; line-height: 1.55; white-space: pre-line; overflow-wrap: anywhere; }
+    .career-chat-message.assistant { align-self: flex-start; border: 1px solid #eeedf4; border-top-left-radius: 5px; color: var(--text); background: #f7f7fb; }
+    .career-chat-message.user { align-self: flex-end; border-top-right-radius: 5px; color: white; background: var(--purple); }
+    .career-chat-prompts { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 16px 12px; }
+    .career-chat-prompt { border: 1px solid #e4def7; border-radius: 999px; padding: 7px 10px; color: var(--purple-dark); background: white; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .career-chat-prompt:hover { background: var(--purple-soft); }
+    .career-chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); background: white; }
+    .career-chat-input { min-width: 0; flex: 1; height: 42px; border: 1px solid #e4e6ed; border-radius: 11px; padding: 0 12px; color: var(--navy); background: #fbfbfd; font: inherit; font-size: 13px; }
+    .career-chat-input:focus { outline: 2px solid rgba(115,87,216,.22); border-color: #aa9be7; }
+    .career-chat-send { width: 43px; height: 42px; border: 0; border-radius: 11px; color: white; background: var(--purple); font-size: 18px; cursor: pointer; }
+    .career-chat-send:hover { background: var(--purple-dark); }
+    .career-chat-send:disabled { opacity: .5; cursor: not-allowed; }
+
     @media (max-width: 980px) {
       .hero { grid-template-columns: 1fr 380px; gap: 28px; }
       h1 { letter-spacing: -3px; }
@@ -339,6 +401,8 @@
       .roadmap-layout { grid-template-columns: 1fr; }
       .roadmap-summary { position: static; }
       #matches, #roadmap, #assess { padding-bottom: 100px; }
+      .career-chat-launcher { right: 16px; bottom: 84px; min-height: 50px; }
+      .career-chat { right: 14px; bottom: 145px; max-height: min(560px, calc(100dvh - 175px)); }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
@@ -399,6 +463,31 @@
       <section class="view" id="roadmap"></section>
     </main>
   </div>
+
+  <button class="career-chat-launcher" id="careerChatLauncher" type="button" aria-controls="careerChat" aria-expanded="false">
+    <span class="career-chat-launcher-icon" aria-hidden="true">✦</span>
+    <span>Ask CareerPath</span>
+  </button>
+  <section class="career-chat" id="careerChat" aria-label="CareerPath career guide" aria-hidden="true" hidden>
+    <div class="career-chat-header">
+      <div class="career-chat-title">
+        <span class="career-chat-avatar" aria-hidden="true">✦</span>
+        <div><strong>CareerPath Guide</strong><small>Career questions, made simpler</small></div>
+      </div>
+      <button class="career-chat-close" id="careerChatClose" type="button" aria-label="Close career guide">×</button>
+    </div>
+    <p class="career-chat-note">Curated career guidance, not a live AI or a substitute for professional advice.</p>
+    <div class="career-chat-messages" id="careerChatMessages" role="log" aria-live="polite" aria-relevant="additions"></div>
+    <div class="career-chat-prompts" id="careerChatPrompts" aria-label="Suggested questions">
+      <button class="career-chat-prompt" type="button">Which career might fit me?</button>
+      <button class="career-chat-prompt" type="button">What should I learn first?</button>
+      <button class="career-chat-prompt" type="button">How do I get started?</button>
+    </div>
+    <form class="career-chat-form" id="careerChatForm">
+      <input class="career-chat-input" id="careerChatInput" type="text" maxlength="400" autocomplete="off" placeholder="Ask a career question..." aria-label="Your career question">
+      <button class="career-chat-send" type="submit" aria-label="Send message">↑</button>
+    </form>
+  </section>
 
   <script>
     const C = {
@@ -503,6 +592,138 @@
         }
       });
     }
+
+    const CAREER_ROLES = {
+      data:["Data analyst","Machine learning engineer","Business intelligence analyst"],
+      soft:["Frontend developer","Backend developer","Software engineer"],
+      ux:["UX designer","Product designer","UX researcher"],
+      biz:["Business analyst","BI analyst","Operations analyst"],
+      sec:["Security analyst","SOC analyst","Penetration tester"]
+    };
+    const careerChat = $("#careerChat");
+    const careerChatLauncher = $("#careerChatLauncher");
+    const careerChatMessages = $("#careerChatMessages");
+    const careerChatInput = $("#careerChatInput");
+
+    function addCareerChatMessage(text, sender) {
+      const message = document.createElement("div");
+      message.className = `career-chat-message ${sender}`;
+      message.textContent = text;
+      careerChatMessages.append(message);
+      careerChatMessages.scrollTop = careerChatMessages.scrollHeight;
+    }
+
+    function setCareerChatOpen(open) {
+      careerChat.hidden = !open;
+      careerChat.setAttribute("aria-hidden", String(!open));
+      careerChatLauncher.setAttribute("aria-expanded", String(open));
+      if (open) careerChatInput.focus();
+      else careerChatLauncher.focus();
+    }
+
+    function careerKeysIn(question) {
+      const text = question.toLowerCase();
+      const terms = {
+        data:[/\bdata\b/,/\bai\b/,/machine learning/,/\bml\b/,/statistics/,/\bpython\b/],
+        soft:[/software/,/\bdeveloper\b/,/programming/,/\bcoding\b/,/\bcode\b/,/javascript/,/web development/],
+        ux:[/\bux\b/,/user experience/,/product design/,/\bfigma\b/,/\bdesign\b/],
+        biz:[/\bbusiness\b/,/analytics/,/business analyst/,/\bexcel\b/,/\bsql\b/,/dashboard/],
+        sec:[/cybersecurity/,/cyber security/,/\bsecurity\b/,/networking/,/\blinux\b/,/ethical hacking/]
+      };
+      return Object.keys(terms).filter(key=>terms[key].some(term=>term.test(text)));
+    }
+
+    function careerDetails(key) {
+      const career = C[key];
+      return `${career.n}: ${career.d}\nUseful starting skills: ${career.tags.join(", ")}.\nTry first: ${career.f[0]} and ${career.f[1]}.\nPossible roles include ${CAREER_ROLES[key].join(", ")}.`;
+    }
+
+    function careerChatAnswer(question) {
+      const text = question.toLowerCase();
+      const found = careerKeysIn(text);
+      const compare = /\b(compare|difference|vs\.?|versus|between)\b/.test(text);
+      const topMatches = res && ans.length
+        ? res.slice(0,3).map(([key,score])=>`${C[key].n} (${score}% fit)`).join(", ")
+        : "";
+
+      if (/\b(salary|pay|earn|income|wage)\b/.test(text)) {
+        return "Pay depends a lot on location, experience, industry, and role. I don’t have live salary data, so check recent local job listings and trusted salary surveys for a realistic range. Compare several postings, not a single estimate.";
+      }
+
+      if (compare && found.length >= 2) {
+        const [first, second] = found;
+        return `Here’s a quick comparison:\n\n${C[first].n}: ${C[first].d} Start with ${C[first].tags.slice(0,2).join(" and ")}.\n\n${C[second].n}: ${C[second].d} Start with ${C[second].tags.slice(0,2).join(" and ")}.\n\nTry a small beginner project in each field and notice which work you enjoy more.`;
+      }
+
+      if (/\b(which|what)\b.*\b(career|field|job|path|fit|suit|right for me)\b|\b(career|field|job|path)\b.*\b(for me|fit me|suit me)\b/.test(text)) {
+        if (topMatches) return `Your assessment points to ${topMatches}. These are directional interest matches, not a prediction of job success. Open Matches to explore them, or ask me about one field.`;
+        return "I can help you explore, but I need a little more about your interests first. Take the five-question assessment for personalized career matches, or ask me about Data & AI, Software Engineering, UX Design, Business Analytics, or Cybersecurity.";
+      }
+
+      if (found.length) {
+        const key = found[0];
+        const career = C[key];
+        if (/\b(time|long|weeks|months|duration)\b/.test(text)) {
+          return `The example ${career.n} roadmap takes about 15 weeks at 6–8 hours a week. Treat that as a flexible guide; your pace depends on your background and time for practice.`;
+        }
+        if (/\b(no degree|without a degree|college|university|degree|experience|experienced|beginner)\b/.test(text)) {
+          return `Requirements for ${career.n} roles vary by employer and location, so check current entry-level listings near you. Build the foundations (${career.f.join(" and ")}) and show what you can do with a focused project, such as ${career.p}.`;
+        }
+        if (/\b(job|jobs|hire|hiring|resume|cv|interview|portfolio|application)\b/.test(text)) {
+          return `For ${career.n}, review local entry-level job descriptions and note the repeated skills. Build a project like “${career.p}”, document your contribution clearly on your CV, and ask a mentor or peer to review it before applying.`;
+        }
+        if (/\b(learn|study|skill|start|begin|roadmap|first|course|practice)\b/.test(text)) {
+          return `For ${career.n}, build up in steps:\n1. ${career.f[0]} and ${career.f[1]}.\n2. Move on to ${career.c[0]} and ${career.c[1]}.\n3. Make a small portfolio project: ${career.p}.\nYou can open the ${career.n} roadmap on this site for the full sequence.`;
+        }
+        return careerDetails(key);
+      }
+
+      if (/\b(learn|study|skill|course|roadmap|first|start|begin|beginner|practice)\b/.test(text)) {
+        const key = pick || (res && ans.length ? res[0][0] : null);
+        if (key) {
+          const career = C[key];
+          return `Your current top match is ${career.n}. Start with ${career.f[0]} and ${career.f[1]}, then practice with ${career.p}. Your roadmap has a week-by-week version of this plan.`;
+        }
+        return "A good beginner plan is to choose one field, learn its foundations, then build a small project to apply them. The assessment can help narrow the field; after that, I can suggest a starting plan for it.";
+      }
+
+      if (/\b(no degree|without a degree|college|university|degree|experience|experienced|beginner)\b/.test(text)) {
+        return "Requirements vary by employer and country, so check current entry-level listings in your area. Whatever your education route, build relevant skills and show evidence: a small project, clear notes on your process, and feedback from someone in the field can help you demonstrate what you can do.";
+      }
+
+      if (/\b(job|jobs|hire|hiring|resume|cv|interview|portfolio|application)\b/.test(text)) {
+        const key = pick || (res && ans.length ? res[0][0] : null);
+        const focus = key ? ` For ${C[key].n}, include a relevant project such as: ${C[key].p}.` : "";
+        return `Start by reviewing entry-level job descriptions and listing their most repeated skills. Build one focused project, describe your contribution and results clearly on your CV, and ask a mentor or peer to review it. Tailor each application to the role.${focus}`;
+      }
+
+      if (/\b(time|long|weeks|months|duration)\b/.test(text)) {
+        return "The example roadmap on this site is about 15 weeks at 6–8 hours per week. Treat that as a flexible starting point: your pace will depend on your background, schedule, and how much practice you need.";
+      }
+
+      return "I can help with the five career fields on this site: Data & AI, Software Engineering, UX Design, Business Analytics, and Cybersecurity. Try asking “What should I learn first for UX Design?”, “Compare Data & AI and Business Analytics”, or “Which career might fit me?”";
+    }
+
+    careerChatLauncher.addEventListener("click",()=>setCareerChatOpen(true));
+    $("#careerChatClose").addEventListener("click",()=>setCareerChatOpen(false));
+    $("#careerChatForm").addEventListener("submit",event=>{
+      event.preventDefault();
+      const question=careerChatInput.value.trim();
+      if (!question) return;
+      addCareerChatMessage(question,"user");
+      careerChatInput.value="";
+      addCareerChatMessage(careerChatAnswer(question),"assistant");
+    });
+    document.querySelectorAll(".career-chat-prompt").forEach(button=>{
+      button.addEventListener("click",()=>{
+        careerChatInput.value=button.textContent;
+        $("#careerChatForm").requestSubmit();
+      });
+    });
+    document.addEventListener("keydown",event=>{
+      if (event.key==="Escape" && !careerChat.hidden) setCareerChatOpen(false);
+    });
+    addCareerChatMessage("Hi! I can help you explore career paths, beginner skills, roadmaps, and ways to get started. What would you like to know?","assistant");
   </script>
 </body>
 </html>

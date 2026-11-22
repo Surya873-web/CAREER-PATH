@@ -11,8 +11,11 @@ https://careerpath-ai-t4vf.onrender.com/
 - Five-question interactive career assessment
 - Career matches with fit scores and explanations
 - Roadmaps with learning milestones and project ideas
+- An in-page career guide with curated answers and suggested questions
 - Responsive layout with subtle 3D visual effects
 - No account or sign-up required
+
+The career guide uses predefined, on-device guidance; it is not a generative AI service and does not send questions to an external provider.
 
 ## Run locally
 
